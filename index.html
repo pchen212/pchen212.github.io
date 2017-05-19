@@ -11805,7 +11805,7 @@ This tracks information like, pitch speed, types of pitch, rotation speed, hitti
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>In this tutorial, we will use dataset provided by <a href='http://www.seanlahman.com/baseball-archive/statistics/'>Sean Lahman</a>. Sean's dataset provides detailed information from team franchises to individual player performences. Today we will be using ERA, Strikeouts and Innings pitched from his dataset.</p>
-<p>We will also use another dataset from &lt;a = href="<a href="https://baseballsavant.mlb.com/statcast_search"&gt;Baseball">https://baseballsavant.mlb.com/statcast_search"&gt;Baseball</a> Savant&lt;/a&gt;. This website allows you to look up statistics collected by MLB's statcast tool. We will collect the stats mentioned in the introduction form this website.</p>
+<p>We will also use another dataset from <a href="https://baseballsavant.mlb.com/statcast_search">Baseball Savant</a>. This website allows you to look up statistics collected by MLB's statcast tool. We will collect the stats mentioned in the introduction form this website.</p>
 
 </div>
 </div>
@@ -11831,7 +11831,7 @@ This tracks information like, pitch speed, types of pitch, rotation speed, hitti
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -11839,7 +11839,7 @@ This tracks information like, pitch speed, types of pitch, rotation speed, hitti
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">statsmodels.formula.api</span> <span class="k">as</span> <span class="nn">smf</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">sklearn</span>
+<span class="kn">import</span> <span class="nn">sklearn.linear_model</span> <span class="k">as</span> <span class="nn">sk</span>
 </pre></div>
 
 </div>
@@ -11865,14 +11865,14 @@ This tracks information like, pitch speed, types of pitch, rotation speed, hitti
 As mentioned before, we will be using datas provided by Sean Lahman and Bseball Savant.<br>
 Below I provided links for all the data sets that we will need for this tutorial.</p>
 <ul>
-<li><a herf="lahman2016.sqlite">lahman2016.sqlite</a>  </li>
-<li><a herf="statcast_velocity.csv">statcast_velocity.csv</a>  </li>
-<li><a herf="statcast_inzone.csv">statcast_inzone.csv</a>  </li>
-<li><a herf="statcast_outzone.csv">statcast_outzone.csv</a>  </li>
-<li><a herf="statcast_offspeed.csv">statcast_offspeed.csv</a>  </li>
-<li><a herf="statcast_fastball.csv">statcast_fastball.csv</a><br>
-These files should be put in the same folder as the Jupyter Notebook.  </li>
+<li><a href="https://pchen212.github.io/lahman2016.sqlite">lahman2016.sqlite</a>  </li>
+<li><a href="https://pchen212.github.io/statcast_velocity.csv">statcast_velocity.csv</a>  </li>
+<li><a href="https://pchen212.github.io/statcast_inzone.csv">statcast_inzone.csv</a>  </li>
+<li><a href="https://pchen212.github.io/statcast_outzone.csv">statcast_outzone.csv</a>  </li>
+<li><a href="https://pchen212.github.io/statcast_offspeed.csv">statcast_offspeed.csv</a>  </li>
+<li><a href="https://pchen212.github.io/statcast_fastball.csv">statcast_fastball.csv</a>  </li>
 </ul>
+<p>These files should be put in the same folder as the Jupyter Notebook.</p>
 <p>For the first part we will use lahman2016.sqlite.<br>
 The following command shows you how to load a sqlite into your notebook.</p>
 
@@ -11881,7 +11881,7 @@ The following command shows you how to load a sqlite into your notebook.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">lahman_2016</span> <span class="o">=</span> <span class="s1">&#39;lahman2016.sqlite&#39;</span>
@@ -11909,7 +11909,7 @@ Also we had to calcualte the K/9 by ourselves which is simply just 9*(Strikeouts
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pitcher_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT (MASTER.nameFirst||</span><span class="se">\&quot;</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2">||MASTER.nameLast) AS player_name,ERA, yearID AS year,</span>
@@ -11930,7 +11930,7 @@ Also we had to calcualte the K/9 by ourselves which is simply just 9*(Strikeouts
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[41]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[35]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -12005,7 +12005,7 @@ Since the dataframe was ordered by ERA in ascending order, we can just filter by
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pitcher_stats</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -12019,7 +12019,7 @@ Since the dataframe was ordered by ERA in ascending order, we can just filter by
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[42]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[36]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12041,7 +12041,7 @@ Name: year, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">top10</span><span class="p">(</span><span class="n">year</span><span class="p">):</span>
@@ -12066,7 +12066,7 @@ Name: year, dtype: int64</pre>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[43]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[37]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -12177,7 +12177,7 @@ the function takes in the csv file names, and the columns that we want, and colu
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">clean_df</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">rename_target</span><span class="p">,</span> <span class="n">rename_value</span><span class="p">):</span>
@@ -12205,7 +12205,7 @@ Let me show you what it looks like before cleaning it up.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">example</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;statcast_velocity.csv&quot;</span><span class="p">)</span>
@@ -12220,7 +12220,7 @@ Let me show you what it looks like before cleaning it up.</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[45]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[39]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -12396,7 +12396,7 @@ Let me show you what it looks like before cleaning it up.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">statcast_velocity</span> <span class="o">=</span> <span class="n">clean_df</span><span class="p">(</span><span class="s1">&#39;statcast_velocity&#39;</span><span class="p">,[</span><span class="s1">&#39;player_name&#39;</span><span class="p">,</span><span class="s1">&#39;year&#39;</span><span class="p">,</span><span class="s1">&#39;velocity&#39;</span><span class="p">],</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -12416,7 +12416,7 @@ Let me show you what it looks like before cleaning it up.</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[46]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[40]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -12486,7 +12486,7 @@ now we combine the lists and merge them with the rest of the stats</strong></p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">top10s</span> <span class="o">=</span> <span class="n">top10_2010</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">top10_2011</span><span class="p">,</span><span class="n">top10_2012</span><span class="p">,</span><span class="n">top10_2013</span><span class="p">,</span><span class="n">top10_2014</span><span class="p">,</span><span class="n">top10_2015</span><span class="p">])</span>
@@ -12507,7 +12507,7 @@ now we combine the lists and merge them with the rest of the stats</strong></p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[47]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[41]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -12634,14 +12634,14 @@ This part can get a little tricky since we are using a loop to create these grap
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">reg_line</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;velocity&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;inzone&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;outzone&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;fastball&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;offspeed&#39;</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;ERA&#39;</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;K9&#39;</span><span class="p">:</span><span class="mi">8</span><span class="p">}</span>
     <span class="n">npMatrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">npMatrix</span><span class="p">[:,</span><span class="n">columns</span><span class="p">[</span><span class="n">x</span><span class="p">]],</span> <span class="n">npMatrix</span><span class="p">[:,</span><span class="n">columns</span><span class="p">[</span><span class="n">y</span><span class="p">]]</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">linear_model</span><span class="o">.</span><span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">sk</span><span class="o">.</span><span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
     <span class="n">m</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">intercept_</span>
     <span class="k">return</span> <span class="n">m</span><span class="p">,</span><span class="n">b</span>
@@ -12664,7 +12664,7 @@ This part can get a little tricky since we are using a loop to create these grap
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">v_m</span><span class="p">,</span> <span class="n">v_b</span> <span class="o">=</span>  <span class="n">reg_line</span><span class="p">(</span><span class="n">statcast</span><span class="p">,</span> <span class="s1">&#39;velocity&#39;</span><span class="p">,</span> <span class="s1">&#39;ERA&#39;</span><span class="p">)</span>
@@ -12700,7 +12700,7 @@ Using title,xlabel and ylabel to set the corresponding titles for the graphs.</p
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">plots</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
@@ -13870,7 +13870,7 @@ xEnBzMxKnBTMzKzk/wMxAgWIs/A/XgAAAABJRU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">velocity</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">((((</span><span class="mf">2.5</span><span class="o">-</span><span class="n">v_b</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">v_m</span><span class="p">))[</span><span class="mi">0</span><span class="p">]),</span><span class="mi">2</span><span class="p">))</span>
@@ -13920,7 +13920,7 @@ Strikeouts per 9innings &gt;= 8.34
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">temp</span> <span class="o">=</span> <span class="p">(</span><span class="n">statcast_velocity</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">statcast_inzone</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">,</span><span class="s1">&#39;year&#39;</span><span class="p">])</span>
@@ -13945,7 +13945,7 @@ Strikeouts per 9innings &gt;= 8.34
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[52]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[46]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
